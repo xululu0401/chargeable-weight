@@ -1,0 +1,1031 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>计费重对账台</title><style>
+:root{font:16px system-ui,-apple-system,"PingFang SC",sans-serif;color:#22344e;background:#eef3f8}*{box-sizing:border-box}body{margin:0}header,main,footer{max-width:1240px;margin:auto;padding:30px}header{padding-top:44px}h1{font-size:42px;margin:10px 0;letter-spacing:-1px;overflow-wrap:anywhere}header p{color:#5a6d84;max-width:900px;line-height:1.8}.eyebrow{font-size:12px;letter-spacing:2px;color:#4f6b91;font-weight:700}main{padding-top:0;display:grid;grid-template-columns:440px minmax(0,1fr);gap:22px}.panel{border:1px solid #d9e3ee;background:white;padding:24px;border-radius:18px;min-width:0}.input{align-self:start}h2{font-size:22px;margin:0 0 14px;overflow-wrap:anywhere}h3{font-size:17px;margin:24px 0 8px;overflow-wrap:anywhere}h4{font-size:14px;margin:16px 0 6px;color:#4f6b91;overflow-wrap:anywhere}label{font-size:14px;font-weight:650;display:block;margin:13px 0 6px}input[type=text],select{width:100%;min-width:0;font:inherit;font-size:14px;padding:8px 9px;border:1px solid #aebfd4;border-radius:8px;color:inherit;background:#fcfdff}
+.item{border:1px solid #e2e9f1;border-radius:12px;padding:10px 12px 6px;margin:10px 0;background:#fafcfe}.item-head{display:flex;align-items:center;gap:8px}.item-head .idx{flex:0 0 auto;width:22px;height:22px;line-height:22px;text-align:center;border-radius:50%;background:#e8eef7;color:#3b5b86;font-size:12px;font-weight:700}.item-head input{flex:1 1 auto}.grid5{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px 8px}.grid5 .f{margin:8px 0 4px}.grid5 .f span{font-size:12px;color:#61738a;font-weight:600;display:block;margin-bottom:3px}.grid5 .f input{padding:6px 7px}
+.rate{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:2px 12px}.rate .f{margin:10px 0 4px}.rate .f span{font-size:12.5px;color:#61738a;font-weight:600;display:block;margin-bottom:3px}
+.buttons{display:flex;flex-wrap:wrap;gap:8px;margin:13px 0}button{font:inherit;font-size:14px;padding:9px 12px;border:1px solid #bac9dc;border-radius:8px;background:#eff4fb;color:#254d87;cursor:pointer;max-width:100%;white-space:normal}button.primary{background:#2d5f96;color:white;border-color:#2d5f96}button.mini{font-size:12px;padding:3px 8px;flex:0 0 auto}button:disabled{opacity:.4;cursor:not-allowed}.hint{font-size:13px;line-height:1.75;color:#61738a}.notice{background:#fff3dc;color:#725025;padding:12px;border-radius:9px;font-size:13px;line-height:1.85;margin-top:14px}.metric{font-size:24px;font-weight:600;margin:4px 0 6px;line-height:1.6;overflow-wrap:anywhere}.metric strong{font-size:31px;font-weight:750}.stats{display:flex;gap:16px;flex-wrap:wrap;margin:18px 0}.stats>div{min-width:0}.stats strong{display:block;font-size:22px;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}.stats span{font-size:12px;color:#6a7c92;display:block;max-width:126px;line-height:1.4}.bad{color:#a23b28}.good{color:#2b6b4f}.tag{display:inline-block;font-size:12px;padding:3px 9px;border-radius:20px;background:#e8eef7;color:#3b5b86;margin-left:4px;vertical-align:middle}.tag.bad{background:#fbe4de;color:#a23b28}.tag.good{background:#e3f1ea;color:#2b6b4f}.card{border-left:3px solid #6e90bd;margin:14px 0 0 6px;padding-left:14px}.card p{margin:6px 0;font-size:13.5px;line-height:1.8;overflow-wrap:anywhere}.card .num{font-variant-numeric:tabular-nums}table{width:100%;border-collapse:collapse;font-size:13px;margin-top:10px}table.stack td{white-space:nowrap}table.stack td:first-child{white-space:normal;overflow-wrap:anywhere}th,td{text-align:left;padding:8px 6px;border-bottom:1px solid #e4eaf1;font-variant-numeric:tabular-nums;overflow-wrap:anywhere;vertical-align:top}th{font-size:12px;color:#62748c;font-weight:650;overflow-wrap:normal;word-break:keep-all}tr.cur{background:#eef6f0}tr.dim{color:#7c8b9d}.scroll{overflow-x:auto}.legend{font-size:12.5px;color:#61738a;line-height:1.8;margin:10px 0 0}.advice{padding-left:20px;margin:8px 0}.advice li{font-size:13.5px;line-height:1.9;margin:6px 0;overflow-wrap:anywhere}#message{font-size:13px;min-height:22px;color:#526b87;overflow-wrap:anywhere}#savedNote{font-size:12px;color:#718095;line-height:1.7;overflow-wrap:anywhere}#error{color:#a34024;font-weight:650;min-height:22px;overflow-wrap:anywhere}#imports{display:none}#ovBox[hidden]{display:none}#downloads{display:none}.model{margin-top:26px;border-top:1px solid #dae3ee;padding-top:18px}.model p{line-height:1.85;font-size:14px}.model code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px}summary{cursor:pointer;font-weight:650}footer{padding-top:0;color:#718095;font-size:12px;line-height:1.8}
+@media(max-width:900px){header,main,footer{padding:18px}h1{font-size:29px}main{grid-template-columns:1fr}.panel{padding:18px}.metric{font-size:20px}.metric strong{font-size:24px}.stats{gap:12px}.stats strong{font-size:19px}.stats span{max-width:104px}.grid5{grid-template-columns:repeat(2,minmax(0,1fr))}.rate{grid-template-columns:repeat(2,minmax(0,1fr))}.scroll{overflow-x:visible}table.stack,table.stack tbody,table.stack tr,table.stack td{display:block;width:100%}table.stack thead{display:none}table.stack tr{border:1px solid #e0e8f0;border-radius:10px;padding:10px;margin:10px 0}table.stack td{border:0;padding:3px 0;font-size:13px;overflow-wrap:anywhere}table.stack td:before{content:attr(data-label) "：";color:#6a7c92;font-size:12px}}
+@media(max-width:340px){.grid5,.rate{grid-template-columns:minmax(0,1fr)}}
+</style><header><div class="eyebrow">CHARGEABLE WEIGHT LEDGER · 寄件计费重对账</div><h1>这一箱寄出去，到底按几公斤收钱？</h1><p>快递收的不是「你称出来的重量」，而是<strong>计费重</strong>：取<strong>实重</strong>与<strong>体积重</strong>（长×宽×高÷除数，常见 6000/8000）里更大的那个，再按进位规则向上取整，然后才套首重 + 续重的价目表。所以一袋蓬松的被子可能只有 2.5 kg，却按 26.5 kg 收钱。把每件的重量和三边填进来，本页算清<strong>每件按多重计费、被体积重多收了多少、拆成几个包裹寄最便宜、合并成一件到底划不划算</strong>——所有分块方案都精确枚举，不是估算。</p></header><main>
+<section class="panel input" id="inputPanel"><h2>先填要寄的东西</h2>
+<div id="items"></div>
+<div id="rowNote" class="hint"></div>
+<div class="buttons"><button type="button" id="addRow">添加一行</button><button type="button" id="demo" class="primary">载入虚构示例</button></div>
+<h4>报价表（你填的假设，默认值只是示例）</h4>
+<div class="rate">
+<label class="f"><span>首重 kg</span><input type="text" inputmode="decimal" id="firstKg" value="1" aria-label="首重公斤"></label>
+<label class="f"><span>首重价 元</span><input type="text" inputmode="decimal" id="firstPrice" value="10" aria-label="首重价元"></label>
+<label class="f"><span>续重步长 kg</span><input type="text" inputmode="decimal" id="stepKg" value="1" aria-label="续重步长公斤"></label>
+<label class="f"><span>续重价 元/步长</span><input type="text" inputmode="decimal" id="stepPrice" value="5" aria-label="续重价元"></label>
+<label class="f"><span>体积重除数 cm³/kg</span><input type="text" inputmode="numeric" id="divisor" value="6000" aria-label="体积重除数"></label>
+<label class="f"><span>进位规则 kg</span><select id="roundingKg" aria-label="进位规则"><option value="0.1">向上取整到 0.1</option><option value="0.5" selected>向上取整到 0.5</option><option value="1">向上取整到 1</option></select></label>
+<label class="f"><span>最低计费重 kg</span><input type="text" inputmode="decimal" id="minKg" value="1" aria-label="最低计费重公斤"></label>
+<label class="f"><span>最多包裹数</span><select id="maxParcels" aria-label="最多包裹数"><option value="1">1</option><option value="2">2</option><option value="3" selected>3</option><option value="4">4</option></select></label>
+<label class="f"><span>合并体积系数</span><input type="text" inputmode="decimal" id="mergeFactor" value="1.10" aria-label="合并体积系数"></label>
+</div>
+<div id="ovBox" hidden><label style="display:flex;align-items:flex-start;gap:8px;font-weight:500;font-size:13.5px;margin:12px 0 6px;line-height:1.7"><input type="checkbox" id="ovOn" style="width:16px;height:16px;margin:2px 0 0;flex:0 0 auto"><span>我已有一个实测外箱，用它算「全部合并成 1 个包裹」（其他方案仍用等比估算）</span></label>
+<div class="grid5"><label class="f"><span>外箱长 cm</span><input type="text" inputmode="decimal" id="ovL" aria-label="实测外箱长"></label><label class="f"><span>外箱宽 cm</span><input type="text" inputmode="decimal" id="ovW" aria-label="实测外箱宽"></label><label class="f"><span>外箱高 cm</span><input type="text" inputmode="decimal" id="ovH" aria-label="实测外箱高"></label></div></div>
+<div class="hint">1–8 行，每行 ≤24 字符名；实重 0.01–100 kg（≤3 位小数）；三边 1–300 cm（≤1 位小数）；每行件数 1–9，各行件数之和 ≤10（超了请分几次算）。全部数据只在本机浏览器里算，不上传、不联网。</div>
+<div class="buttons"><button type="button" id="save">保存到本机</button><button type="button" id="restore">恢复已保存</button><button type="button" id="backup">下载备份</button><button type="button" id="import">导入备份</button></div><input id="imports" type="file" accept=".json,application/json">
+<div id="savedNote"></div><div id="message" role="status"></div></section>
+<section class="panel"><div id="error" role="alert"></div><div id="result" aria-live="polite"></div>
+<div class="buttons" id="downloads"><button type="button" id="csv">导出明细 CSV</button><button type="button" id="md">导出结果说明 MD</button><button type="button" id="png" class="primary">下载结果卡 PNG</button><button type="button" id="json">下载 JSON 备份</button></div>
+<details class="model"><summary>算法与使用边界（数字口径都在这里）</summary>
+<p><strong>体积重</strong> = 长 × 宽 × 高 ÷ 除数（cm³/kg）。除数 6000 表示 6000 cm³ 折 1 kg；除数越小越贵（5000 比 6000 严，体积重更大）。本页全程不把 cm 换成别的单位再换回来：尺寸以<strong>毫米</strong>存、体积以<strong>立方毫米</strong>存，体积重（克）= 体积(mm³) ÷ 除数，两次换算恰好约掉。</p>
+<p><strong>计费重</strong> = max( 按进位规则向上取整的 max(实重, 体积重), 最低计费重 )。进位规则只向上取整、绝不抹零：一辆 26.25 kg 的被子按 0.5 kg 进位就是 26.5 kg，按 1 kg 进位就是 27 kg。<strong>体积重与实重完全相等时不判抛重</strong>，页面上标「相等」。</p>
+<p><strong>运费</strong> = 首重价 + 续重步数 × 续重价，计费重不超过首重时只收首重价；续重步数 = 向上取整((计费重 − 首重) ÷ 续重步长)。全部金额以<strong>分</strong>为单位做整数运算，不会出现 0.1+0.2 那种浮点尾巴。</p>
+<p><strong>合并外箱怎么算</strong>：一个包裹里只有 1 件时直接用该件自身三边；多件时取体积最大的那一件当基准箱，等比放大 s = ∛(合并体积系数 × 各件体积之和 ÷ 基准体积)，三边各自四舍五入到毫米且不小于原边，再相乘得外箱体积。这是<strong>估算口径，不是装箱算法</strong>——它只保证外箱体积约等于「系数 × 各件体积之和」，不保证真装得下、不考虑留缝隙与缓冲材料。有实测外箱时请勾选并填入，「全部合并」方案会改用实测值，其余方案仍用估算。</p>
+<p><strong>拆包怎么找最优</strong>：本页枚举「每一件整件物品分到哪个包裹」的<strong>全部划分</strong>（件数不超过 10 件、包裹数不超过你设的上限时全部枚举完，这是精确最优，不是贪心也不是启发式），对每个划分算出各包计费重与运费并求和，取总价最小；总价相同时取包裹数更少的方案，再相同时按字典序取定，因此同一组输入永远给同一个答案。页面上「枚举的分块方案数」就是本次真实枚举过的划分个数。若「全部逐件单独寄」需要的包裹数超过你设的上限，它只作为对照行列出、不参与最优。</p>
+<p><strong>敏感性表</strong>：体积重除数换成 5000/6000/8000/12000 与进位规则换成 0.1/0.5/1 kg 时，各自重新做一次<strong>完整枚举</strong>得出最优，不是用当前结果折算的。进位规则只改计费重，只有当它跨过续重步长时才会改运费——如果两列金额一样而计费重合计不同，那是真的没跨过去。</p>
+<p><strong>做不到的</strong>：不做装箱（不判断实际能否塞进箱子）；不查任何快递公司的真实报价，费率与除数都是你填的假设；不处理分区价、偏远附加费、燃油附加费、保价费、包装费、超长超重附加费、按体积计价（而非按体积重）的特殊产品；不处理「同规格多件必须同包」之类的承运规则；不联网、不与人或平台比对。本页只回答一件事：<strong>在你自己填的费率下，这几件事按多重计费、拆还是合更便宜</strong>。</p>
+</details></section></main><footer>计费重对账台 · V1.0.0 · 全部数字来自本页同一次整数口径计算；默认样例（物品与费率）为虚构示例，不代表任何快递公司的实际报价 · AI 辅助开发 · 只做计费重与运费的算术对账</footer>
+<script>(function(g){
+'use strict';
+// 计费重对账台 · 核心计算（纯函数，无 DOM、无网络）
+// 口径、公式与边界见 ../需求与调研.md「需求简报」一节。
+// 全程整数运算：重量用克(g)、尺寸用毫米(mm)、金额用分(cents)、体积用立方毫米(mm³)；
+// 体积重用「分子/分母」有理数比较，避免浮点漂移。
+
+var LIMITS={
+  MIN_ROWS:1, MAX_ROWS:8,
+  MIN_QTY:1, MAX_QTY:9, MAX_UNITS:10,
+  MIN_WEIGHT_G:10, MAX_WEIGHT_G:100000,   // 0.01–100 kg
+  MIN_DIM_MM:10, MAX_DIM_MM:3000,         // 1–300 cm
+  MIN_DIVISOR:1000, MAX_DIVISOR:20000,
+  MIN_FIRST_G:100, MAX_FIRST_G:100000,
+  MIN_PRICE_C:0, MAX_PRICE_C:1000000,     // 0–10000 元
+  MIN_STEP_G:100, MAX_STEP_G:100000,
+  MIN_MIN_G:0, MAX_MIN_G:100000,
+  MIN_PARCELS:1, MAX_PARCELS:4,
+  MIN_MERGE_PCT:100, MAX_MERGE_PCT:160,   // 合并体积系数 1.00–1.60
+  ROUNDING_CHOICES:[100,500,1000],
+  DIVISOR_PRESETS:[5000,6000,8000,12000],
+  SHRINK_KEEP:[90,80,70]
+};
+var ROUNDING_LABELS={100:'0.1 kg',500:'0.5 kg',1000:'1 kg'};
+
+// ── 基础工具 ────────────────────────────────────────────────
+function ceilDiv(a,b){return Math.floor((a+b-1)/b);}   // a≥0、b>0 的整数
+
+function err(msg){var e=new Error(msg);e.userMessage=msg;return e;}
+
+function decToInt(v,mult,label){
+  var s;
+  if(typeof v==='number'){ if(!Number.isFinite(v))throw err(label+'需为数字'); s=String(v); }
+  else s=(v===null||v===undefined)?'':String(v).trim();
+  if(s==='')throw err(label+'不能为空');
+  if(!/^\d+(\.\d+)?$/.test(s))throw err(label+'需为非负数字（不支持负号、千分位、科学计数法）');
+  var multDigits=String(mult).length-1;
+  var parts=s.split('.'),frac=parts[1]||'';
+  if(frac.length>multDigits)throw err(label+'最多 '+multDigits+' 位小数');
+  var f=frac.length<multDigits?frac+'0'.repeat(multDigits-frac.length):frac;
+  var out=Number(parts[0])*mult+(multDigits?Number(f):0);
+  if(!Number.isFinite(out))throw err(label+'超出可处理范围');
+  return out;
+}
+
+function toIntStrict(v,label){
+  if(typeof v==='number'){ if(!Number.isInteger(v))throw err(label+'需为整数'); return v; }
+  var s=(v===null||v===undefined)?'':String(v).trim();
+  if(s==='')throw err(label+'不能为空');
+  if(!/^\d+$/.test(s))throw err(label+'需为非负整数');
+  return Number(s);
+}
+
+// 非负有理数 num/den → 四舍五入到 decimals 位的十进制字符串
+function rationalToFixed(num,den,decimals){
+  var pow=Math.pow(10,decimals);
+  var scaled=num*pow;
+  var q=Math.floor(scaled/den);
+  if((scaled-q*den)*2>=den)q+=1;
+  if(decimals<=0)return String(q);
+  var s=String(q);
+  s='0'.repeat(Math.max(0,decimals+1-s.length))+s;
+  return s.slice(0,s.length-decimals)+'.'+s.slice(s.length-decimals);
+}
+function rationalToNumber(num,den,decimals){return Number(rationalToFixed(num,den,decimals));}
+function gToKgStr(g){return (g/1000).toFixed(2);}
+function centsToYuan(c){return (c/100).toFixed(2);}
+
+// ── 计费重与运费 ────────────────────────────────────────────
+// 体积重(g) = V(mm³) ÷ 除数(cm³/kg)：mm³÷1000 得 cm³，再 ×1000 得 g，两次换算恰好约掉。
+function isVolumeDominant(weightG,Vmm3,divisor){return Vmm3>weightG*divisor;}
+
+// 计费重(g) = max( 按进位规则向上取整的 max(实重, 体积重), 最低计费重 )
+function chargeableG(weightG,Vmm3,divisor,roundG,minG){
+  var byVolume=isVolumeDominant(weightG,Vmm3,divisor),cg;
+  if(byVolume)cg=ceilDiv(Vmm3,divisor*roundG)*roundG;
+  else cg=Math.ceil(weightG/roundG)*roundG;
+  if(cg<minG)cg=minG;
+  return {chargeG:cg,byVolume:byVolume};
+}
+
+// 运费(分) = 首重价 + 续重步数 × 续重价；计费重不超过首重时只收首重价
+function freightC(chargeG,firstG,firstC,stepG,stepC){
+  if(chargeG<=firstG)return firstC;
+  return firstC+ceilDiv(chargeG-firstG,stepG)*stepC;
+}
+
+// ── 合并外箱估算 ────────────────────────────────────────────
+// 单件：直接用该件自身三边。
+// 多件：以体积最大的那一件为基准箱，等比放大 s = ∛(系数 × 体积之和 ÷ 基准体积)，
+//       三边各自四舍五入到毫米且不小于原边，再相乘得外箱体积。这是估算，不是装箱算法。
+function boxDims(units,pct){
+  if(!units.length)throw err('空的分块');
+  if(units.length===1){var u=units[0];return {Lmm:u.Lmm,Wmm:u.Wmm,Hmm:u.Hmm,Vmm3:u.Vmm3,s:1,base:0};}
+  var Vsum=0,maxV=-1,mi=0,i;
+  for(i=0;i<units.length;i++){
+    Vsum+=units[i].Vmm3;
+    if(units[i].Vmm3>maxV){maxV=units[i].Vmm3;mi=i;}
+  }
+  var base=units[mi],s=Math.cbrt((pct/100)*Vsum/maxV);
+  var Lm=Math.max(base.Lmm,Math.round(base.Lmm*s));
+  var Wm=Math.max(base.Wmm,Math.round(base.Wmm*s));
+  var Hm=Math.max(base.Hmm,Math.round(base.Hmm*s));
+  return {Lmm:Lm,Wmm:Wm,Hmm:Hm,Vmm3:Lm*Wm*Hm,s:s,base:mi};
+}
+
+// ── 划分枚举（受限增长串，每个划分恰好枚举一次）─────────────
+function forEachPartition(n,maxBlocks,fn){
+  if(n<=0)return;
+  if(n===1){fn([0]);return;}
+  var a=new Array(n),top=Math.min(maxBlocks,n);
+  a[0]=0;
+  (function rec(i,maxUsed){
+    if(i===n){fn(a.slice());return;}
+    var up=Math.min(maxUsed+1,top-1);
+    for(var v=0;v<=up;v++){a[i]=v;rec(i+1,v>maxUsed?v:maxUsed);}
+  })(1,0);
+}
+
+// ── solve ───────────────────────────────────────────────────
+function solve(input){
+  input=input||{};
+  var L=LIMITS;
+  var raw=input.items;
+  if(!Array.isArray(raw)||raw.length<L.MIN_ROWS)throw err('至少需要 1 行物品');
+  if(raw.length>L.MAX_ROWS)throw err('最多 '+L.MAX_ROWS+' 行物品，当前 '+raw.length+' 行');
+
+  // 1) 解析物品
+  var rows=[],units=[],totalUnits=0,i,q;
+  for(i=0;i<raw.length;i++){
+    var r=raw[i]||{},no=i+1,pre='第'+no+'行';
+    var name=String(r.name===null||r.name===undefined?'':r.name).trim();
+    if(!name)name='物品'+no;
+    if(name.length>24)name=name.slice(0,24);
+    var weightG=decToInt(r.weightKg,1000,pre+'实重(kg)');
+    if(weightG<L.MIN_WEIGHT_G||weightG>L.MAX_WEIGHT_G)
+      throw err(pre+'实重需在 0.01–100 kg');
+    var Lmm=decToInt(r.Lcm,10,pre+'长(cm)'),Wmm=decToInt(r.Wcm,10,pre+'宽(cm)'),Hmm=decToInt(r.Hcm,10,pre+'高(cm)');
+    var dk=[['长',Lmm],['宽',Wmm],['高',Hmm]];
+    for(var d=0;d<3;d++)if(dk[d][1]<L.MIN_DIM_MM||dk[d][1]>L.MAX_DIM_MM)
+      throw err(pre+dk[d][0]+'需在 1–300 cm');
+    var qty=toIntStrict((r.qty===undefined||r.qty===null||r.qty==='')?1:r.qty,pre+'件数');
+    if(qty<L.MIN_QTY||qty>L.MAX_QTY)throw err(pre+'件数需在 1–'+L.MAX_QTY);
+    var Vmm3=Lmm*Wmm*Hmm;
+    rows.push({no:no,name:name,weightG:weightG,Lmm:Lmm,Wmm:Wmm,Hmm:Hmm,Vmm3:Vmm3,qty:qty});
+    totalUnits+=qty;
+  }
+  if(totalUnits>L.MAX_UNITS)
+    throw err('总件数 '+totalUnits+' 超过上限 '+L.MAX_UNITS+'（各行件数之和）；请减少行数或件数');
+  rows.forEach(function(it){for(var n=0;n<it.qty;n++)units.push({
+    row:it.no,name:it.name,weightG:it.weightG,Lmm:it.Lmm,Wmm:it.Wmm,Hmm:it.Hmm,Vmm3:it.Vmm3});});
+
+  // 2) 解析报价表与参数
+  var rate=input.rate||{};
+  var firstG=decToInt(rate.firstKg,1000,'首重(kg)');
+  if(firstG<L.MIN_FIRST_G||firstG>L.MAX_FIRST_G)throw err('首重需在 0.1–100 kg');
+  var stepG=decToInt(rate.stepKg,1000,'续重步长(kg)');
+  if(stepG<L.MIN_STEP_G||stepG>L.MAX_STEP_G)throw err('续重步长需在 0.1–100 kg');
+  var firstC=decToInt(rate.firstPrice,100,'首重价(元)');
+  if(firstC<L.MIN_PRICE_C||firstC>L.MAX_PRICE_C)throw err('首重价需在 0–10000 元');
+  var stepC=decToInt(rate.stepPrice,100,'续重价(元)');
+  if(stepC<L.MIN_PRICE_C||stepC>L.MAX_PRICE_C)throw err('续重价需在 0–10000 元');
+  var divisor=toIntStrict(rate.divisor,'体积重除数');
+  if(divisor<L.MIN_DIVISOR||divisor>L.MAX_DIVISOR)
+    throw err('体积重除数需在 '+L.MIN_DIVISOR+'–'+L.MAX_DIVISOR+'（cm³/kg）');
+  var roundG=decToInt(rate.roundingKg,1000,'进位规则(kg)');
+  if(L.ROUNDING_CHOICES.indexOf(roundG)<0)throw err('进位规则只支持 0.1 / 0.5 / 1 kg');
+  var minG=decToInt((rate.minKg===undefined||rate.minKg==='')?0:rate.minKg,1000,'最低计费重(kg)');
+  if(minG<L.MIN_MIN_G||minG>L.MAX_MIN_G)throw err('最低计费重需在 0–100 kg');
+  var maxParcels=toIntStrict((input.maxParcels===undefined||input.maxParcels==='')?3:input.maxParcels,'最多包裹数');
+  if(maxParcels<L.MIN_PARCELS||maxParcels>L.MAX_PARCELS)
+    throw err('最多包裹数需在 '+L.MIN_PARCELS+'–'+L.MAX_PARCELS);
+  var mergePct=decToInt((input.mergeFactor===undefined||input.mergeFactor==='')?'1.00':input.mergeFactor,100,'合并体积系数');
+  if(mergePct<L.MIN_MERGE_PCT||mergePct>L.MAX_MERGE_PCT)throw err('合并体积系数需在 1.00–1.60');
+
+  var ov=input.mergeOverride||null,ovDims=null;
+  if(ov&&ov.on){
+    var oL=decToInt(ov.Lcm,10,'实测外箱长(cm)'),oW=decToInt(ov.Wcm,10,'实测外箱宽(cm)'),oH=decToInt(ov.Hcm,10,'实测外箱高(cm)');
+    var okd=[[oL,'长'],[oW,'宽'],[oH,'高']];
+    for(var k2=0;k2<3;k2++)if(okd[k2][0]<L.MIN_DIM_MM||okd[k2][0]>L.MAX_DIM_MM)
+      throw err('实测外箱'+okd[k2][1]+'需在 1–300 cm');
+    ovDims={Lmm:oL,Wmm:oW,Hmm:oH,Vmm3:oL*oW*oH,s:null,base:null,override:true};
+  }
+
+  // 3) 单个包裹的成本
+  function blockOf(list,isAll){
+    var weightG=0,Vsum=0,j;
+    for(j=0;j<list.length;j++){weightG+=list[j].weightG;Vsum+=list[j].Vmm3;}
+    var box=(list.length===1)?boxDims(list,mergePct)
+      :((isAll&&ovDims)?ovDims:boxDims(list,mergePct));
+    var ch=chargeableG(weightG,box.Vmm3,divisor,roundG,minG);
+    var fr=freightC(ch.chargeG,firstG,firstC,stepG,stepC);
+    var volKg=rationalToNumber(box.Vmm3,divisor*1000,3);
+    return {
+      count:list.length,
+      names:list.map(function(u){return u.name;}),
+      rows:list.map(function(u){return u.row;}),
+      weightG:weightG,weightKg:weightG/1000,
+      Lmm:box.Lmm,Wmm:box.Wmm,Hmm:box.Hmm,
+      Lcm:box.Lmm/10,Wcm:box.Wmm/10,Hcm:box.Hmm/10,
+      boxVmm3:box.Vmm3,boxVcm3:box.Vmm3/1000,scale:box.s,override:!!box.override,
+      volWeightKg:volKg,volWeightRatio:weightG>0?rationalToNumber(box.Vmm3,divisor*weightG,2):0,
+      chargeG:ch.chargeG,chargeKg:ch.chargeG/1000,
+      byVolume:ch.byVolume,
+      freightC:fr,freightYuan:fr/100
+    };
+  }
+
+  // 4) 逐规格诊断（每件单独寄）
+  var soloC=0;
+  var rowOut=rows.map(function(it){
+    var ch=chargeableG(it.weightG,it.Vmm3,divisor,roundG,minG);
+    var fr=freightC(ch.chargeG,firstG,firstC,stepG,stepC);
+    var chW=chargeableG(it.weightG,0,divisor,roundG,minG);
+    var frW=freightC(chW.chargeG,firstG,firstC,stepG,stepC);
+    var byVolume=ch.byVolume;
+    var rawNum,rawDen;
+    if(byVolume){rawNum=it.Vmm3;rawDen=divisor;}else{rawNum=it.weightG;rawDen=1;}
+    var carryNum=ch.chargeG*rawDen-rawNum;
+    soloC+=fr*it.qty;
+    return {
+      no:it.no,name:it.name,qty:it.qty,
+      weightKg:it.weightG/1000,weightG:it.weightG,
+      Lcm:it.Lmm/10,Wcm:it.Wmm/10,Hcm:it.Hmm/10,Vcm3:it.Vmm3/1000,
+      volWeightKg:rationalToNumber(it.Vmm3,divisor*1000,3),
+      volWeightRatio:rationalToNumber(it.Vmm3,divisor*it.weightG,2),
+      byVolume:byVolume,
+      dominant:byVolume?'体积重':((it.Vmm3===it.weightG*divisor)?'相等':'实重'),
+      chargeKg:ch.chargeG/1000,chargeG:ch.chargeG,
+      carryKg:rationalToFixed(carryNum,rawDen*1000,3),
+      inflationPct:ch.chargeG>0?Math.round((ch.chargeG-it.weightG)*1000/ch.chargeG)/10:0,
+      freightYuan:fr/100,freightC:fr,
+      rowFreightYuan:fr*it.qty/100,rowFreightC:fr*it.qty,
+      weightOnlyChargeKg:chW.chargeG/1000,
+      weightOnlyFreightYuan:frW/100,
+      overpayYuan:(fr-frW)*it.qty/100,overpayC:(fr-frW)*it.qty
+    };
+  });
+
+  // 5) 枚举全部分块方案（每包由若干整件组成，块数 ≤ 最多包裹数）
+  function cmpRgs(a,b){for(var z=0;z<a.length;z++)if(a[z]!==b[z])return a[z]-b[z];return 0;}
+  var best=null,bestByK={},partCount=0;
+  forEachPartition(units.length,maxParcels,function(a){
+    partCount++;
+    var total=0,blocks=[],b,j;
+    for(b=0;b<maxParcels;b++){
+      var list=[];
+      for(j=0;j<a.length;j++)if(a[j]===b)list.push(units[j]);
+      if(list.length){
+        var blk=blockOf(list,list.length===units.length);
+        total+=blk.freightC;blocks.push(blk);
+      }
+    }
+    var kk=blocks.length,rec={k:kk,totalC:total,blocks:blocks,rgs:a.slice()};
+    if(!best||total<best.totalC||(total===best.totalC&&(kk<best.k||(kk===best.k&&cmpRgs(a,best.rgs)<0))))best=rec;
+    var cur=bestByK[kk];
+    if(!cur||total<cur.totalC||(total===cur.totalC&&cmpRgs(a,cur.rgs)<0))bestByK[kk]=rec;
+  });
+
+  // 6) 方案对照
+  var perK=Object.keys(bestByK).map(Number).sort(function(x,y){return x-y;}).map(function(k){return bestByK[k];});
+  var singleAll=blockOf(units.slice(),true);
+  var schemes=[];
+  schemes.push({key:'best',label:'最优方案（'+best.k+' 个包裹）',k:best.k,totalC:best.totalC,blocks:best.blocks});
+  perK.forEach(function(p){
+    if(p.k===best.k)return;
+    schemes.push({key:'k'+p.k,
+      label:(p.k===units.length?'全部逐件单独寄（'+p.k+' 个包裹）':p.k+' 个包裹（该包数下最省）'),
+      k:p.k,totalC:p.totalC,blocks:p.blocks});
+  });
+  if(units.length>maxParcels){
+    schemes.push({key:'solo',label:'全部逐件单独寄（'+units.length+' 个包裹，超出最多包裹数，仅对照）',
+      k:units.length,totalC:soloC,blocks:units.map(function(u){return blockOf([u],units.length===1);}),outOfLimit:true});
+  }
+  schemes.forEach(function(s){
+    s.totalYuan=s.totalC/100;
+    s.savingVsSoloC=soloC-s.totalC;
+    s.savingVsSoloYuan=(soloC-s.totalC)/100;
+    s.isBest=s.key==='best';
+    s.outOfLimit=!!s.outOfLimit;
+  });
+  schemes.sort(function(a,b){return a.totalC-b.totalC||a.k-b.k;});
+  var outOfLimitCheaper=schemes.some(function(s){return s.outOfLimit&&s.totalC<best.totalC;});
+
+  // 7) 敏感性：指定除数/进位下的最优与逐件总价
+  function bestFor(dv,rg){
+    var b=null;
+    forEachPartition(units.length,maxParcels,function(a){
+      var total=0,k=0,bx,j;
+      for(bx=0;bx<maxParcels;bx++){
+        var list=[];
+        for(j=0;j<a.length;j++)if(a[j]===bx)list.push(units[j]);
+        if(list.length){
+          k++;
+          var w=0,V=0;
+          for(j=0;j<list.length;j++){w+=list[j].weightG;V+=list[j].Vmm3;}
+          var box=(list.length===1)?boxDims(list,mergePct)
+            :((list.length===units.length&&ovDims)?ovDims:boxDims(list,mergePct));
+          var ch=chargeableG(w,box.Vmm3,dv,rg,minG);
+          total+=freightC(ch.chargeG,firstG,firstC,stepG,stepC);
+        }
+      }
+      if(!b||total<b.totalC)b={totalC:total,k:k};
+    });
+    return b;
+  }
+  var roundSens=L.ROUNDING_CHOICES.map(function(rg){
+    var t=bestFor(divisor,rg),solo=0,chargeSum=0;
+    rowOut.forEach(function(r){
+      var ch=chargeableG(r.weightG,r.Vcm3*1000,divisor,rg,minG);
+      chargeSum+=ch.chargeG*r.qty;
+      solo+=freightC(ch.chargeG,firstG,firstC,stepG,stepC)*r.qty;
+    });
+    return {roundG:rg,label:ROUNDING_LABELS[rg],bestYuan:t.totalC/100,bestC:t.totalC,bestK:t.k,
+      soloYuan:solo/100,soloChargeKg:chargeSum/1000,current:rg===roundG};
+  });
+  var divSens=L.DIVISOR_PRESETS.map(function(dv){
+    var t=bestFor(dv,roundG),solo=0,volSum=0;
+    rowOut.forEach(function(r){
+      var ch=chargeableG(r.weightG,r.Vcm3*1000,dv,roundG,minG);
+      solo+=freightC(ch.chargeG,firstG,firstC,stepG,stepC)*r.qty;
+      volSum+=Math.round(r.Vcm3*1000/dv)*r.qty;
+    });
+    return {divisor:dv,bestYuan:t.totalC/100,bestC:t.totalC,bestK:t.k,
+      soloYuan:solo/100,soloVolWeightKg:volSum/1000,current:dv===divisor};
+  });
+
+  // 8) 体积压缩模拟（按钮会真的改输入并重算）
+  var shrinkSim=L.SHRINK_KEEP.map(function(keepPct){
+    var sc=Math.cbrt(keepPct/100);
+    var su=[];
+    rows.forEach(function(it){
+      var Lm=Math.max(L.MIN_DIM_MM,Math.round(it.Lmm*sc));
+      var Wm=Math.max(L.MIN_DIM_MM,Math.round(it.Wmm*sc));
+      var Hm=Math.max(L.MIN_DIM_MM,Math.round(it.Hmm*sc));
+      for(var n=0;n<it.qty;n++)su.push({row:it.no,name:it.name,weightG:it.weightG,Lmm:Lm,Wmm:Wm,Hmm:Hm,Vmm3:Lm*Wm*Hm});
+    });
+    var b=null;
+    forEachPartition(su.length,maxParcels,function(a){
+      var total=0,bx,j;
+      for(bx=0;bx<maxParcels;bx++){
+        var list=[];
+        for(j=0;j<a.length;j++)if(a[j]===bx)list.push(su[j]);
+        if(list.length){
+          var w=0,V=0;
+          for(j=0;j<list.length;j++){w+=list[j].weightG;V+=list[j].Vmm3;}
+          var box=boxDims(list,mergePct);
+          var ch=chargeableG(w,box.Vmm3,divisor,roundG,minG);
+          total+=freightC(ch.chargeG,firstG,firstC,stepG,stepC);
+        }
+      }
+      if(!b||total<b.totalC)b={totalC:total,k:0};
+    });
+    return {keepPct:keepPct,totalYuan:b.totalC/100,totalC:b.totalC,
+      savingVsBestYuan:(best.totalC-b.totalC)/100,savingVsBestC:best.totalC-b.totalC,
+      savingVsSoloYuan:(soloC-b.totalC)/100};
+  });
+
+  // 9) 建议
+  var advice=[];
+  var volRows=rowOut.filter(function(r){return r.byVolume;});
+  var denseRows=rowOut.filter(function(r){return !r.byVolume;});
+  if(volRows.length)advice.push({kind:'bulky',text:'有 '+volRows.length+' 个规格的计费重由体积重决定：'+
+    volRows.map(function(r){return r.name+'（实重 '+r.weightKg.toFixed(2)+' kg，按 '+r.chargeKg.toFixed(2)+' kg 计费，抛重 '+r.volWeightRatio.toFixed(2)+' 倍）';}).join('；')+
+    '。对它们压实、抽真空或换小箱，比减轻重量更有效。'});
+  if(denseRows.length)advice.push({kind:'dense',text:'有 '+denseRows.length+' 个规格由实重决定计费重（'+
+    denseRows.map(function(r){return r.name;}).join('、')+'）：压体积不改变这些规格的计费重，只能减重或减少件数。'});
+  if(best.k===1){
+    advice.push({kind:'merge',text:'本场景合并成 1 个包裹最省：'+centsToYuan(soloC)+' 元 → '+centsToYuan(best.totalC)+
+      ' 元，省 '+centsToYuan(soloC-best.totalC)+' 元（'+(soloC>0?Math.round((soloC-best.totalC)*1000/soloC)/10:0)+'%）。'+
+      '合并后这 1 个包裹按 '+singleAll.chargeKg.toFixed(2)+' kg 计费，但省下 '+(units.length-1)+' 次首重。'});
+  }else if(best.k<units.length){
+    advice.push({kind:'split',text:'本场景拆成 '+best.k+' 个包裹最省：'+centsToYuan(soloC)+' 元 → '+centsToYuan(best.totalC)+
+      ' 元，省 '+centsToYuan(soloC-best.totalC)+' 元。全部合并成 1 个包裹要 '+centsToYuan(singleAll.freightC)+' 元，比最优方案'+
+      (singleAll.freightC>best.totalC?'贵 ':'便宜 ')+centsToYuan(Math.abs(singleAll.freightC-best.totalC))+' 元。'});
+  }else{
+    advice.push({kind:'split',text:'本场景下每个规格各寄一个包裹就是最省的（'+centsToYuan(soloC)+' 元）：任何合并都更贵，因为合并带来的体积重涨幅超过了省下的首重。'});
+  }
+  var shrinkNote=shrinkSim[1];
+  if(outOfLimitCheaper)
+    advice.push({kind:'limit',text:'你限制了最多 '+maxParcels+' 个包裹，最优解是 '+centsToYuan(best.totalC)+' 元；如果每个规格单独寄（'+
+      units.length+' 个包裹）只要 '+centsToYuan(soloC)+' 元，能再省 '+centsToYuan(best.totalC-soloC)+' 元。要不要为了少寄 '+
+      (units.length-best.k)+' 个包裹多花这 '+centsToYuan(best.totalC-soloC)+' 元由你定；把「最多包裹数」调大即可看到不受限的最优解。'});
+  if(volRows.length&&shrinkNote.savingVsBestC>0)
+    advice.push({kind:'shrink',text:'若把所有规格的三边等比压到 80%（体积约 51%），最优方案可由 '+centsToYuan(best.totalC)+
+      ' 元降到 '+centsToYuan(shrinkNote.totalC)+' 元，再省 '+centsToYuan(shrinkNote.savingVsBestC)+' 元。按下面的按钮可直接改输入重算。'});
+  advice.push({kind:'estimate',text:(ovDims?'“全部合并”方案用你填的实测外箱 '+(ovDims.Lmm/10)+'×'+(ovDims.Wmm/10)+'×'+(ovDims.Hmm/10)+' cm 计算；其他方案仍用等比估算。':
+    '合并外箱按「放大最大件」等比估算，系数 '+ (mergePct/100).toFixed(2) +'；这不是装箱算法，只保证体积等于系数×各件体积之和的近似（三边取整到毫米）。有实测外箱时请勾选并填入，结果会改用实测值。')});
+
+  var warnings=[
+    '全部金额、计费重与体积重都由本页同一套整数口径算出：重量按克、尺寸按毫米、金额按分，体积重用有理数比较，不做浮点近似。',
+    '报价表、进位规则与体积重除数都是你填的假设值；默认样例的费率与物品均为虚构示例，不代表任何快递公司的实际报价。'
+  ];
+  if(units.length>1&&maxParcels<units.length)
+    warnings.push('「全部逐件单独寄」需要 '+units.length+' 个包裹，超过最多包裹数 '+maxParcels+'，只作对照，不参与最优。');
+  if(outOfLimitCheaper)
+    warnings.push('少寄包裹是有代价的：若不受「最多 '+maxParcels+' 个包裹」限制，全部逐件单独寄只要 '+centsToYuan(soloC)+
+      ' 元，比当前最优便宜 '+centsToYuan(best.totalC-soloC)+' 元。把「最多包裹数」调到 '+units.length+' 即可看到不受限的最优解。');
+
+  return {
+    ok:true,
+    rows:rowOut,rowCount:rows.length,units:units.length,
+    totalWeightKg:rows.reduce(function(s,r){return s+r.weightG*r.qty;},0)/1000,
+    totalVolCm3:units.reduce(function(s,u){return s+u.Vmm3;},0)/1000,
+    maxParcels:maxParcels,partitions:partCount,
+    rate:{firstKg:firstG/1000,firstYuan:firstC/100,stepKg:stepG/1000,stepYuan:stepC/100,
+      divisor:divisor,roundingKg:roundG/1000,roundingLabel:ROUNDING_LABELS[roundG],minKg:minG/1000},
+    mergeFactor:mergePct/100,
+    soloC:soloC,soloYuan:soloC/100,
+    best:{k:best.k,totalC:best.totalC,totalYuan:best.totalC/100,
+      savingVsSoloC:soloC-best.totalC,savingVsSoloYuan:(soloC-best.totalC)/100,
+      pct:soloC>0?Math.round((soloC-best.totalC)*1000/soloC)/10:0,
+      blocks:best.blocks},
+    singleBox:{k:1,totalC:singleAll.freightC,totalYuan:singleAll.freightC/100,
+      chargeKg:singleAll.chargeKg,volWeightKg:singleAll.volWeightKg,weightKg:singleAll.weightG/1000,
+      Lcm:singleAll.Lmm/10,Wcm:singleAll.Wmm/10,Hcm:singleAll.Hmm/10,
+      boxVcm3:singleAll.boxVmm3/1000,byVolume:singleAll.byVolume,
+      scale:singleAll.scale,override:singleAll.override,
+      savingVsSoloYuan:(soloC-singleAll.freightC)/100},
+    schemes:schemes,
+    roundSens:roundSens,divSens:divSens,shrinkSim:shrinkSim,
+    advice:advice,warnings:warnings
+  };
+}
+
+// ── 默认样例（虚构：搬家寄 5 个规格）────────────────────────
+var sample={
+  items:[
+    {name:'书籍箱',weightKg:'22.0',Lcm:'45',Wcm:'35',Hcm:'30',qty:'1'},
+    {name:'棉被袋（未压缩）',weightKg:'2.5',Lcm:'70',Wcm:'50',Hcm:'45',qty:'1'},
+    {name:'衣物箱',weightKg:'5.0',Lcm:'70',Wcm:'50',Hcm:'45',qty:'1'},
+    {name:'厨具箱',weightKg:'9.5',Lcm:'50',Wcm:'40',Hcm:'35',qty:'1'},
+    {name:'显示器原箱',weightKg:'4.0',Lcm:'65',Wcm:'45',Hcm:'40',qty:'1'}
+  ],
+  rate:{firstKg:'1',firstPrice:'10',stepKg:'1',stepPrice:'5',divisor:'6000',roundingKg:'0.5',minKg:'1'},
+  maxParcels:'3',mergeFactor:'1.10',
+  mergeOverride:{on:false,Lcm:'',Wcm:'',Hcm:''}
+};
+
+var api={solve:solve,sample:sample,
+  chargeableG:chargeableG,freightC:freightC,boxDims:boxDims,forEachPartition:forEachPartition,
+  isVolumeDominant:isVolumeDominant,ceilDiv:ceilDiv,decToInt:decToInt,toIntStrict:toIntStrict,
+  rationalToFixed:rationalToFixed,rationalToNumber:rationalToNumber,
+  gToKgStr:gToKgStr,centsToYuan:centsToYuan,
+  LIMITS:LIMITS,ROUNDING_LABELS:ROUNDING_LABELS};
+g.AppCore=api;
+if(typeof module!=='undefined')module.exports=api;
+})(globalThis);
+</script><script>(function(){
+'use strict';
+var C=window.AppCore;
+var $=function(id){return document.getElementById(id);};
+var STORE='chargeable-weight-v1';
+var items=[];
+
+function esc(s){return String(s===null||s===undefined?'':s)
+  .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function yuan(n){return (Math.round(Number(n)*100)/100).toFixed(2);}
+function num(n,d){var v=Number(n);return Number.isFinite(v)?v.toFixed(d===undefined?2:d):'—';}
+
+// ── 物品行 ──────────────────────────────────────────────────
+function fld(cls,label,val,aria){
+  return '<label class="f"><span>'+esc(label)+'</span>'
+    +'<input type="text" inputmode="decimal" class="'+cls+'" value="'+esc(val)+'" aria-label="'+esc(aria)+'"></label>';
+}
+function itemHTML(it,i){
+  return '<div class="item" data-i="'+i+'">'
+    +'<div class="item-head"><span class="idx">'+(i+1)+'</span>'
+    +'<input type="text" class="i-name" maxlength="24" value="'+esc(it.name)+'" aria-label="第'+(i+1)+'行名称" placeholder="名称，如 书籍箱">'
+    +'<button type="button" class="mini del" data-del="'+i+'">删除</button></div>'
+    +'<div class="grid5">'
+    +fld('i-w','实重 kg',it.weightKg,'第'+(i+1)+'行实重公斤')
+    +fld('i-l','长 cm',it.Lcm,'第'+(i+1)+'行长厘米')
+    +fld('i-wd','宽 cm',it.Wcm,'第'+(i+1)+'行宽厘米')
+    +fld('i-h','高 cm',it.Hcm,'第'+(i+1)+'行高厘米')
+    +fld('i-q','件数',it.qty,'第'+(i+1)+'行件数')
+    +'</div></div>';
+}
+function renderItems(){
+  var box=$('items');
+  box.innerHTML=items.map(itemHTML).join('');
+  $('addRow').disabled=items.length>=C.LIMITS.MAX_ROWS;
+  $('rowNote').textContent='共 '+items.length+' 行（最多 '+C.LIMITS.MAX_ROWS+' 行），'
+    +'件数合计 '+items.reduce(function(s,it){return s+(Number(it.qty)||0);},0)
+    +' 件（最多 '+C.LIMITS.MAX_UNITS+' 件，超过请拆成多次计算）。';
+}
+function blankItem(){return {name:'',weightKg:'',Lcm:'',Wcm:'',Hcm:'',qty:'1'};}
+
+// ── 读取表单 ────────────────────────────────────────────────
+function readInput(){
+  var list=[].slice.call(document.querySelectorAll('#items .item'));
+  var its=list.map(function(el,i){
+    var g=function(cls){var n=el.querySelector('.'+cls);return n?n.value.trim():'';};
+    return {name:g('i-name'),weightKg:g('i-w'),Lcm:g('i-l'),Wcm:g('i-wd'),Hcm:g('i-h'),qty:g('i-q')};
+  });
+  return {
+    items:its,
+    rate:{firstKg:$('firstKg').value,firstPrice:$('firstPrice').value,stepKg:$('stepKg').value,
+      stepPrice:$('stepPrice').value,divisor:$('divisor').value,roundingKg:$('roundingKg').value,minKg:$('minKg').value},
+    maxParcels:$('maxParcels').value,
+    mergeFactor:$('mergeFactor').value,
+    mergeOverride:{on:$('ovOn').checked,Lcm:$('ovL').value,Wcm:$('ovW').value,Hcm:$('ovH').value}
+  };
+}
+function fillForm(inp){
+  items=(inp.items||[]).map(function(it){return {name:it.name||'',weightKg:String(it.weightKg||''),
+    Lcm:String(it.Lcm||''),Wcm:String(it.Wcm||''),Hcm:String(it.Hcm||''),qty:String(it.qty||'1')};});
+  if(!items.length)items=[blankItem()];
+  renderItems();
+  var r=inp.rate||{};
+  $('firstKg').value=r.firstKg!==undefined?r.firstKg:'1';
+  $('firstPrice').value=r.firstPrice!==undefined?r.firstPrice:'10';
+  $('stepKg').value=r.stepKg!==undefined?r.stepKg:'1';
+  $('stepPrice').value=r.stepPrice!==undefined?r.stepPrice:'5';
+  $('divisor').value=r.divisor!==undefined?r.divisor:'6000';
+  $('roundingKg').value=r.roundingKg!==undefined?r.roundingKg:'0.5';
+  $('minKg').value=r.minKg!==undefined?r.minKg:'1';
+  $('maxParcels').value=inp.maxParcels!==undefined?inp.maxParcels:'3';
+  $('mergeFactor').value=inp.mergeFactor!==undefined?inp.mergeFactor:'1.10';
+  var ov=inp.mergeOverride||{};
+  $('ovOn').checked=!!ov.on;
+  $('ovL').value=ov.Lcm||'';$('ovW').value=ov.Wcm||'';$('ovH').value=ov.Hcm||'';
+  $('ovBox').hidden=!ov.on;
+}
+
+// ── 结果渲染 ────────────────────────────────────────────────
+function blockCard(b,idx){
+  return '<div class="card"><p><strong>包裹 '+(idx+1)+'</strong>：'+esc(b.names.join(' + '))
+    +' <span class="tag">'+b.count+' 件</span>'
+    +(b.byVolume?' <span class="tag bad">体积重主导</span>':' <span class="tag good">实重主导</span>')
+    +(b.override?' <span class="tag">用了实测外箱</span>':'')+'</p>'
+    +'<p class="num">实重 '+num(b.weightKg)+' kg　外箱 '+num(b.Lcm,1)+'×'+num(b.Wcm,1)+'×'+num(b.Hcm,1)
+    +' cm（'+(b.override?'实测':'估算')+'，体积 '+num(b.boxVcm3,0)+' cm³）</p>'
+    +'<p class="num">体积重 '+num(b.volWeightKg,3)+' kg（抛重比 '+num(b.volWeightRatio)+'）　→　'
+    +'<strong>计费重 '+num(b.chargeKg)+' kg　运费 '+yuan(b.freightYuan)+' 元</strong></p></div>';
+}
+function schemeRow(s){
+  return '<tr'+(s.isBest?' class="cur"':'')+(s.outOfLimit?' class="dim"':'')+'><td data-label="方案">'+esc(s.label)
+    +(s.isBest?' <span class="tag good">最优</span>':'')
+    +(s.outOfLimit?' <span class="tag bad">超出上限</span>':'')+'</td>'
+    +'<td data-label="包裹数">'+s.k+'</td>'
+    +'<td data-label="总运费">'+yuan(s.totalYuan)+' 元</td>'
+    +'<td data-label="比逐件省">'+(s.savingVsSoloC>0?yuan(s.savingVsSoloYuan)+' 元':'—')+'</td></tr>';
+}
+function render(r){
+  var h='';
+  h+='<div class="metric">推荐寄 <strong>'+r.best.k+'</strong> 个包裹：总运费 <strong>'+yuan(r.best.totalYuan)+'</strong> 元'
+    +(r.best.savingVsSoloC>0?'，比全部逐件单独寄省 <strong>'+yuan(r.best.savingVsSoloYuan)+'</strong> 元（'+num(r.best.pct,1)+'%）':'')
+    +'</div>';
+  h+='<div class="stats">'
+    +'<div><strong>'+r.units+'</strong><span>件（'+r.rowCount+' 个规格）</span></div>'
+    +'<div><strong>'+yuan(r.soloYuan)+'</strong><span>全部逐件单独寄（元）</span></div>'
+    +'<div><strong>'+yuan(r.singleBox.totalYuan)+'</strong><span>全部合并成 1 个包裹（元）</span></div>'
+    +'<div><strong>'+num(r.totalWeightKg)+'</strong><span>总实重（kg）</span></div>'
+    +'<div><strong>'+num(r.totalVolCm3,0)+'</strong><span>总体积（cm³）</span></div>'
+    +'<div><strong>'+r.partitions+'</strong><span>枚举的分块方案数</span></div>'
+    +'</div>';
+
+  h+='<h3>最优方案的每个包裹</h3>';
+  h+='<div class="blocks">'+r.best.blocks.map(blockCard).join('')+'</div>';
+
+  h+='<h3>方案对照</h3><div class="scroll"><table class="stack"><thead><tr><th>方案</th><th>包裹数</th><th>总运费</th><th>比逐件省</th></tr></thead><tbody>'
+    +r.schemes.map(schemeRow).join('')+'</tbody></table></div>';
+
+  h+='<h3>逐规格诊断（每个规格单独寄的话）</h3><div class="scroll"><table class="stack"><thead><tr>'
+    +'<th>规格</th><th>件数</th><th>实重kg</th><th>体积cm³</th><th>体积重kg</th><th>抛重比</th>'
+    +'<th>主导</th><th>计费重kg</th><th>进位损耗</th><th>运费元</th><th>泡重多付</th></tr></thead><tbody>';
+  r.rows.forEach(function(x){
+    h+='<tr><td data-label="规格">'+esc(x.name)+'</td>'
+      +'<td data-label="件数">'+x.qty+'</td>'
+      +'<td data-label="实重 kg">'+num(x.weightKg)+'</td>'
+      +'<td data-label="体积 cm³">'+num(x.Vcm3,0)+'</td>'
+      +'<td data-label="体积重 kg">'+num(x.volWeightKg,3)+'</td>'
+      +'<td data-label="抛重比">'+num(x.volWeightRatio)+'</td>'
+      +'<td data-label="主导">'+(x.byVolume?'<span class="bad">体积重</span>':(x.dominant==='相等'?'相等':'实重'))+'</td>'
+      +'<td data-label="计费重 kg">'+num(x.chargeKg)+'</td>'
+      +'<td data-label="进位损耗 kg">'+num(x.carryKg,3)+'</td>'
+      +'<td data-label="单件运费">'+yuan(x.freightYuan)+' 元</td>'
+      +'<td data-label="泡重多付">'+(x.overpayYuan>0?'<span class="bad">'+yuan(x.overpayYuan)+' 元</span>':'—')+'</td></tr>';
+  });
+  h+='</tbody></table></div>';
+  h+='<p class="legend">「进位损耗」= 计费重 − max(实重, 体积重) 的差，由进位规则造成；'
+    +'「泡重多付」= 实际运费 − 只按实重计费的运费，也就是体积重和进位一起多收的部分（按该规格全部件数合计）。</p>';
+
+  h+='<h3>体积重除数换一换（当前 '+r.rate.divisor+'）</h3><div class="scroll"><table class="stack"><thead><tr>'
+    +'<th>除数 cm³/kg</th><th>逐规格体积重合计 kg</th><th>全部逐件寄</th><th>最优方案</th><th>最优包裹数</th></tr></thead><tbody>';
+  r.divSens.forEach(function(s){
+    h+='<tr'+(s.current?' class="cur"':'')+'><td data-label="除数">'+s.divisor+(s.current?' <span class="tag">当前</span>':'')+'</td>'
+      +'<td data-label="体积重合计">'+num(s.soloVolWeightKg)+'</td>'
+      +'<td data-label="全部逐件寄">'+yuan(s.soloYuan)+' 元</td>'
+      +'<td data-label="最优方案">'+yuan(s.bestYuan)+' 元</td>'
+      +'<td data-label="最优包裹数">'+s.bestK+'</td></tr>';
+  });
+  h+='</tbody></table></div>';
+
+  h+='<h3>进位规则换一换（当前 '+esc(r.rate.roundingLabel)+'）</h3><div class="scroll"><table class="stack"><thead><tr>'
+    +'<th>进位到</th><th>逐规格计费重合计 kg</th><th>全部逐件寄</th><th>最优方案</th><th>最优包裹数</th></tr></thead><tbody>';
+  r.roundSens.forEach(function(s){
+    h+='<tr'+(s.current?' class="cur"':'')+'><td data-label="进位到">'+esc(s.label)+(s.current?' <span class="tag">当前</span>':'')+'</td>'
+      +'<td data-label="计费重合计">'+num(s.soloChargeKg)+'</td>'
+      +'<td data-label="全部逐件寄">'+yuan(s.soloYuan)+' 元</td>'
+      +'<td data-label="最优方案">'+yuan(s.bestYuan)+' 元</td>'
+      +'<td data-label="最优包裹数">'+s.bestK+'</td></tr>';
+  });
+  h+='</tbody></table></div>';
+  var sameMoney=r.roundSens.every(function(s){return Math.abs(s.soloYuan-r.roundSens[0].soloYuan)<1e-9;});
+  h+='<p class="legend">进位规则改变的是<strong>计费重</strong>（上表第 2 列随进位步长单调不减），'
+    +(sameMoney?'但本场景下因为它没跨过续重步长，<strong>运费一分没变</strong>——这是真实计算结果，不是没算。'
+      :'本场景下它也确实改变了运费。')+'</p>';
+
+  h+='<h3>把体积压一压会怎样</h3><div class="scroll"><table class="stack"><thead><tr>'
+    +'<th>三边压到</th><th>体积约</th><th>最优方案总价</th><th>比现在的最优省</th><th>比全部逐件寄省</th></tr></thead><tbody>';
+  r.shrinkSim.forEach(function(s){
+    var volPct=Math.round(Math.pow(s.keepPct/100,3)*1000)/10;
+    h+='<tr><td data-label="三边压到">'+s.keepPct+'%</td><td data-label="体积约">'+num(volPct,1)+'%</td>'
+      +'<td data-label="最优方案总价">'+yuan(s.totalYuan)+' 元</td>'
+      +'<td data-label="比现在省">'+(s.savingVsBestC>0?yuan(s.savingVsBestYuan)+' 元':'—')+'</td>'
+      +'<td data-label="比逐件省">'+yuan(s.savingVsSoloYuan)+' 元</td></tr>';
+  });
+  h+='</tbody></table></div>';
+  h+='<div class="buttons"><button type="button" id="sh90">把三边压到 90% 并重算</button>'
+    +'<button type="button" id="sh80">把三边压到 80% 并重算</button>'
+    +'<button type="button" id="sh70">把三边压到 70% 并重算</button>'
+    +'<button type="button" id="shReset">还原成压缩前</button></div>'
+    +'<p class="legend">按上面的按钮会<strong>真的改动左侧的长宽高</strong>（三边各乘 ∛系数后四舍五入到 0.1 cm），再重新计算；'
+    +'「还原成压缩前」回到按下按钮之前的那一组尺寸。这是把建议变成动作，不是只给一句劝告。</p>';
+
+  h+='<h3>建议</h3><ul class="advice">'+r.advice.map(function(a){return '<li>'+esc(a.text)+'</li>';}).join('')+'</ul>';
+  h+='<div class="notice">'+r.warnings.map(function(w){return esc(w);}).join('<br>')+'</div>';
+
+  $('result').innerHTML=h;
+  $('downloads').style.display='flex';
+  $('error').textContent='';
+  bindShrink();
+}
+
+// ── 压缩按钮 ────────────────────────────────────────────────
+var backupDims=null;
+function bindShrink(){
+  var map={sh90:90,sh80:80,sh70:70};
+  Object.keys(map).forEach(function(id){
+    var el=$(id);if(!el)return;
+    el.addEventListener('click',function(){
+      var keep=map[id]/100,sc=Math.cbrt(keep);
+      if(!backupDims)backupDims=[].slice.call(document.querySelectorAll('#items .item')).map(function(el){
+        var g=function(c){var n=el.querySelector('.'+c);return n?n.value:'';};
+        return {Lcm:g('i-l'),Wcm:g('i-wd'),Hcm:g('i-h')};});
+      [].slice.call(document.querySelectorAll('#items .item')).forEach(function(el){
+        ['i-l','i-wd','i-h'].forEach(function(c){
+          var n=el.querySelector('.'+c);if(!n)return;
+          var v=Number(n.value);
+          if(!Number.isFinite(v)||v<=0)return;
+          n.value=String(Math.max(1,Math.round(v*sc*10)/10));
+        });
+      });
+      setMessage('已把所有规格的三边按 ∛'+(keep*100).toFixed(0)+'% 缩放（体积约 '+(keep*keep*keep*100).toFixed(0)+'%），并重新计算。');
+      run();
+    });
+  });
+  var rz=$('shReset');
+  if(rz)rz.addEventListener('click',function(){
+    if(!backupDims){setMessage('还没有压缩过，无需还原。');return;}
+    [].slice.call(document.querySelectorAll('#items .item')).forEach(function(el,i){
+      var b=backupDims[i];if(!b)return;
+      var set=function(c,v){var n=el.querySelector('.'+c);if(n)n.value=v;};
+      set('i-l',b.Lcm);set('i-wd',b.Wcm);set('i-h',b.Hcm);
+    });
+    backupDims=null;
+    setMessage('已还原成压缩前的尺寸并重新计算。');
+    run();
+  });
+}
+function setMessage(t){$('message').textContent=t||'';}
+
+// ── 主流程 ──────────────────────────────────────────────────
+var lastSolved=null;
+function run(){
+  var inp;
+  try{inp=readInput();}catch(e){$('error').textContent='读取输入失败：'+e.message;return;}
+  var r;
+  try{
+    r=C.solve(inp);
+  }catch(e){
+    lastSolved=null;
+    $('result').innerHTML='<p class="hint">修正左侧提示的输入后会自动重新计算。</p>';
+    $('downloads').style.display='none';
+    $('error').textContent='✕ '+(e.userMessage||e.message);
+    return;
+  }
+  lastSolved=r;
+  window.__lastResult=r;
+  render(r);
+  autosave();
+}
+
+// ── 持久化 ──────────────────────────────────────────────────
+var saveTimer=null;
+function snapshot(){
+  var inp=readInput();
+  return {v:1,savedAt:new Date().toISOString(),input:inp};
+}
+function autosave(){
+  if(saveTimer)clearTimeout(saveTimer);
+  saveTimer=setTimeout(function(){
+    try{
+      localStorage.setItem(STORE,JSON.stringify(snapshot()));
+      $('savedNote').textContent='已自动保存到本机（'+new Date().toLocaleTimeString('zh-CN')+'）；刷新页面会自动恢复。';
+    }catch(e){
+      $('savedNote').textContent='自动保存失败：'+(e&&e.message?e.message:'浏览器拒绝写入本地存储');
+    }
+  },500);
+}
+function restoreFrom(obj,src){
+  if(!obj||!obj.input){setMessage('没有可恢复的存档。');return;}
+  fillForm(obj.input);
+  backupDims=null;
+  setMessage('已从'+src+'恢复'+(obj.savedAt?'（存档时间 '+obj.savedAt+'）':'')+'。');
+  run();
+}
+
+// ── 导出 ────────────────────────────────────────────────────
+function csvCell(v){var s=String(v===null||v===undefined?'':v);return /[",\n]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s;}
+function toCSV(r){
+  var L=[];
+  L.push(['# 计费重对账台 导出','生成时间 '+new Date().toISOString()].map(csvCell).join(','));
+  L.push(['# 费率','首重 '+r.rate.firstKg+' kg = '+yuan(r.rate.firstYuan)+' 元','续重每 '+r.rate.stepKg+' kg = '+yuan(r.rate.stepYuan)+' 元',
+    '体积重除数 '+r.rate.divisor,'进位 '+r.rate.roundingLabel,'最低计费重 '+r.rate.minKg+' kg','合并体积系数 '+num(r.mergeFactor)].map(csvCell).join(','));
+  L.push('');
+  L.push(['规格','件数','实重kg','长cm','宽cm','高cm','体积cm3','体积重kg','抛重比','主导','计费重kg','进位损耗kg','单件运费元','单件按实重运费元','泡重多付元','整行运费元'].map(csvCell).join(','));
+  r.rows.forEach(function(x){
+    L.push([x.name,x.qty,num(x.weightKg),num(x.Lcm,1),num(x.Wcm,1),num(x.Hcm,1),num(x.Vcm3,0),num(x.volWeightKg,3),
+      num(x.volWeightRatio),x.dominant,num(x.chargeKg),num(x.carryKg,3),yuan(x.freightYuan),yuan(x.weightOnlyFreightYuan),
+      yuan(x.overpayYuan),yuan(x.rowFreightYuan)].map(csvCell).join(','));
+  });
+  L.push('');
+  L.push(['方案','包裹数','总运费元','比逐件省元'].map(csvCell).join(','));
+  r.schemes.forEach(function(s){L.push([s.label,s.k,yuan(s.totalYuan),yuan(s.savingVsSoloYuan)].map(csvCell).join(','));});
+  L.push('');
+  L.push(['最优方案-包裹','包含规格','件数','实重kg','外箱长cm','外箱宽cm','外箱高cm','外箱体积cm3','体积重kg','计费重kg','主导','运费元'].map(csvCell).join(','));
+  r.best.blocks.forEach(function(b,i){
+    L.push(['包裹'+(i+1),b.names.join(' + '),b.count,num(b.weightKg),num(b.Lcm,1),num(b.Wcm,1),num(b.Hcm,1),
+      num(b.boxVcm3,0),num(b.volWeightKg,3),num(b.chargeKg),b.byVolume?'体积重':'实重',yuan(b.freightYuan)].map(csvCell).join(','));
+  });
+  L.push('');
+  L.push(['体积重除数','逐规格体积重合计kg','全部逐件寄元','最优方案元','最优包裹数'].map(csvCell).join(','));
+  r.divSens.forEach(function(s){L.push([s.divisor,num(s.soloVolWeightKg),yuan(s.soloYuan),yuan(s.bestYuan),s.bestK].map(csvCell).join(','));});
+  L.push('');
+  L.push(['进位规则','逐规格计费重合计kg','全部逐件寄元','最优方案元','最优包裹数'].map(csvCell).join(','));
+  r.roundSens.forEach(function(s){L.push([s.label,num(s.soloChargeKg),yuan(s.soloYuan),yuan(s.bestYuan),s.bestK].map(csvCell).join(','));});
+  return '\uFEFF'+L.join('\r\n')+'\r\n';
+}
+function toMD(r){
+  var L=[];
+  L.push('# 计费重对账台 · 结果说明');
+  L.push('');
+  L.push('生成时间：'+new Date().toISOString());
+  L.push('');
+  L.push('## 结论');
+  L.push('');
+  L.push('- 推荐寄 **'+r.best.k+' 个包裹**，总运费 **'+yuan(r.best.totalYuan)+' 元**。');
+  L.push('- 全部逐件单独寄（'+r.units+' 个包裹）要 '+yuan(r.soloYuan)+' 元，最优方案省 '+yuan(r.best.savingVsSoloYuan)+' 元（'+num(r.best.pct,1)+'%）。');
+  L.push('- 全部合并成 1 个包裹要 '+yuan(r.singleBox.totalYuan)+' 元（按 '+num(r.singleBox.chargeKg)+' kg 计费）。');
+  L.push('- 共 '+r.units+' 件 / '+r.rowCount+' 个规格，总实重 '+num(r.totalWeightKg)+' kg，总体积 '+num(r.totalVolCm3,0)+' cm³，枚举了 '+r.partitions+' 种分块方案。');
+  L.push('');
+  L.push('## 费率假设（用户填写）');
+  L.push('');
+  L.push('| 项 | 值 |');
+  L.push('|---|---|');
+  L.push('| 首重 | '+r.rate.firstKg+' kg = '+yuan(r.rate.firstYuan)+' 元 |');
+  L.push('| 续重 | 每 '+r.rate.stepKg+' kg = '+yuan(r.rate.stepYuan)+' 元 |');
+  L.push('| 体积重除数 | '+r.rate.divisor+' cm³/kg |');
+  L.push('| 进位规则 | 向上取整到 '+r.rate.roundingLabel+' |');
+  L.push('| 最低计费重 | '+r.rate.minKg+' kg |');
+  L.push('| 合并体积系数 | '+num(r.mergeFactor)+' |');
+  L.push('| 最多包裹数 | '+r.maxParcels+' |');
+  L.push('');
+  L.push('## 最优方案的每个包裹');
+  L.push('');
+  L.push('| 包裹 | 包含规格 | 件数 | 实重 kg | 外箱 cm | 外箱体积 cm³ | 体积重 kg | 计费重 kg | 主导 | 运费 |');
+  L.push('|---|---|---|---|---|---|---|---|---|---|');
+  r.best.blocks.forEach(function(b,i){
+    L.push('| '+(i+1)+' | '+b.names.join(' + ')+' | '+b.count+' | '+num(b.weightKg)+' | '
+      +num(b.Lcm,1)+'×'+num(b.Wcm,1)+'×'+num(b.Hcm,1)+' | '+num(b.boxVcm3,0)+' | '+num(b.volWeightKg,3)
+      +' | '+num(b.chargeKg)+' | '+(b.byVolume?'体积重':'实重')+' | '+yuan(b.freightYuan)+' 元 |');
+  });
+  L.push('');
+  L.push('## 逐规格诊断（每个规格单独寄）');
+  L.push('');
+  L.push('| 规格 | 件数 | 实重 kg | 体积重 kg | 抛重比 | 主导 | 计费重 kg | 单件运费 | 泡重多付 |');
+  L.push('|---|---|---|---|---|---|---|---|---|');
+  r.rows.forEach(function(x){
+    L.push('| '+x.name+' | '+x.qty+' | '+num(x.weightKg)+' | '+num(x.volWeightKg,3)+' | '+num(x.volWeightRatio)
+      +' | '+x.dominant+' | '+num(x.chargeKg)+' | '+yuan(x.freightYuan)+' 元 | '+(x.overpayYuan>0?yuan(x.overpayYuan)+' 元':'—')+' |');
+  });
+  L.push('');
+  L.push('## 方案对照');
+  L.push('');
+  L.push('| 方案 | 包裹数 | 总运费 | 比逐件省 |');
+  L.push('|---|---|---|---|');
+  r.schemes.forEach(function(s){L.push('| '+s.label+' | '+s.k+' | '+yuan(s.totalYuan)+' 元 | '+yuan(s.savingVsSoloYuan)+' 元 |');});
+  L.push('');
+  L.push('## 敏感性');
+  L.push('');
+  L.push('| 体积重除数 | 逐规格体积重合计 kg | 全部逐件寄 | 最优方案 | 最优包裹数 |');
+  L.push('|---|---|---|---|---|');
+  r.divSens.forEach(function(s){L.push('| '+s.divisor+' | '+num(s.soloVolWeightKg)+' | '+yuan(s.soloYuan)+' 元 | '+yuan(s.bestYuan)+' 元 | '+s.bestK+' |');});
+  L.push('');
+  L.push('| 进位规则 | 逐规格计费重合计 kg | 全部逐件寄 | 最优方案 | 最优包裹数 |');
+  L.push('|---|---|---|---|---|');
+  r.roundSens.forEach(function(s){L.push('| '+s.label+' | '+num(s.soloChargeKg)+' | '+yuan(s.soloYuan)+' 元 | '+yuan(s.bestYuan)+' 元 | '+s.bestK+' |');});
+  L.push('');
+  L.push('## 建议');
+  L.push('');
+  r.advice.forEach(function(a){L.push('- '+a.text);});
+  L.push('');
+  L.push('## 边界与免责');
+  L.push('');
+  r.warnings.forEach(function(w){L.push('- '+w);});
+  L.push('- 本工具只做计费重与运费的算术对账：不装箱、不查任何快递公司的真实报价、不给出寄件建议的物流合规判断。');
+  return L.join('\n')+'\n';
+}
+function download(name,text,mime){
+  var blob=new Blob([text],{type:mime||'text/plain;charset=utf-8'});
+  var url=URL.createObjectURL(blob),a=document.createElement('a');
+  a.href=url;a.download=name;document.body.appendChild(a);a.click();
+  setTimeout(function(){URL.revokeObjectURL(url);a.remove();},1500);
+}
+function drawCard(r){
+  var W=1080,H=1350,L=96,R=W-96,MAXW=R-L;
+  var cv=document.createElement('canvas');
+  cv.width=W;cv.height=H;
+  var x=cv.getContext('2d');
+  var FONT='"PingFang SC",system-ui,-apple-system,sans-serif';
+  function setFont(w,size){x.font=w+' '+size+'px '+FONT;}
+  // 按宽度逐字换行；超过 maxLines 时末行截断加省略号，保证不越界
+  var NO_START='）｝】」』》〉、。，；：？！…·)]}%';
+  var NO_END='（｛【「『《〈([{';
+  function wrap(text,size,weight,maxLines){
+    setFont(weight,size);
+    var out=[],cur='',i;
+    for(i=0;i<text.length;i++){
+      var ch=text[i],test=cur+ch;
+      if(cur&&x.measureText(test).width>MAXW){
+        if(NO_START.indexOf(ch)>=0){out.push(cur+ch);cur='';continue;}   // 收尾标点不另起一行
+        var carry='';
+        while(cur.length>1&&NO_END.indexOf(cur.charAt(cur.length-1))>=0){   // 开引号不留行尾
+          carry=cur.charAt(cur.length-1)+carry;cur=cur.slice(0,-1);
+        }
+        out.push(cur);cur=carry+ch;
+      } else cur=test;
+    }
+    if(cur)out.push(cur);
+    if(out.length>maxLines){
+      out=out.slice(0,maxLines);
+      var last=out[maxLines-1];
+      setFont(weight,size);
+      while(last.length>1&&x.measureText(last+'…').width>MAXW)last=last.slice(0,-1);
+      out[maxLines-1]=last+'…';
+    }
+    return out;
+  }
+  var y=130;
+  function draw(text,size,weight,color,maxLines,gap){
+    var ls=wrap(text,size,weight,maxLines||1);
+    x.fillStyle=color;
+    ls.forEach(function(lineText){
+      setFont(weight,size);
+      x.fillText(lineText,L,y);
+      y+=(gap||Math.round(size*1.35));
+    });
+    return ls.length;
+  }
+  function divider(){x.strokeStyle='#d9e3ee';x.lineWidth=2;x.beginPath();x.moveTo(L,y);x.lineTo(R,y);x.stroke();y+=8;}
+
+  x.fillStyle='#eef3f8';x.fillRect(0,0,W,H);
+  x.fillStyle='#ffffff';x.fillRect(48,48,W-96,H-96);
+
+  draw('计费重对账台 · CHARGEABLE WEIGHT LEDGER',27,700,'#2d5f96',1,78);
+  draw('推荐寄 '+r.best.k+' 个包裹',56,700,'#22344e',1,58);
+  draw('总运费',25,400,'#5a6d84',1,86);
+  setFont(700,80);x.fillStyle='#a23b28';x.fillText(yuan(r.best.totalYuan)+' 元',L,y);y+=70;
+  draw('比全部逐件单独寄省 '+yuan(r.best.savingVsSoloYuan)+' 元（'+num(r.best.pct,1)+'%）',31,700,'#2b6b4f',1,44);
+  draw('全部逐件寄 '+yuan(r.soloYuan)+' 元　·　全部合并 1 个包裹 '+yuan(r.singleBox.totalYuan)+' 元',24,400,'#5a6d84',1,36);
+  draw(r.units+' 件 / '+r.rowCount+' 个规格　·　费率 首重 '+r.rate.firstKg+' kg='+yuan(r.rate.firstYuan)+' 元，续重 '+r.rate.stepKg+' kg='+yuan(r.rate.stepYuan)+' 元',24,400,'#5a6d84',1,36);
+  draw('体积重除数 '+r.rate.divisor+' cm³/kg　·　进位 '+r.rate.roundingLabel+'　·　枚举 '+r.partitions+' 种分块',24,400,'#5a6d84',1,44);
+  divider();
+  y+=34;
+  draw('每个包裹（'+r.best.k+' 个）',30,700,'#22344e',1,44);
+  r.best.blocks.slice(0,3).forEach(function(b,i){
+    draw('包裹 '+(i+1)+'：'+b.names.join(' + ')+(b.count>1?'（'+b.count+' 件）':''),26,700,'#2d5f96',2,34);
+    draw('实重 '+num(b.weightKg)+' kg　外箱 '+num(b.Lcm,1)+'×'+num(b.Wcm,1)+'×'+num(b.Hcm,1)+' cm　体积重 '+num(b.volWeightKg,3)+' kg',
+      22,400,'#5a6d84',2,30);
+    draw('计费重 '+num(b.chargeKg)+' kg（'+(b.byVolume?'体积重主导':'实重主导')+'）　运费 '+yuan(b.freightYuan)+' 元',25,700,'#22344e',1,34);
+  });
+  if(r.best.blocks.length>3)draw('（其余 '+(r.best.blocks.length-3)+' 个包裹见页面明细）',21,400,'#718095',1,30);
+  y+=14;
+  divider();
+  y+=30;
+  var worst=r.rows.slice().sort(function(a,b){return b.volWeightRatio-a.volWeightRatio;})[0];
+  draw('抛重最狠的规格',24,700,'#22344e',1,34);
+  draw(worst.name+'：实重 '+num(worst.weightKg)+' kg，按 '+num(worst.chargeKg)+' kg 计费（抛重 '+num(worst.volWeightRatio)+' 倍，泡重多付 '+yuan(worst.overpayYuan)+' 元）',
+    22,400,'#a23b28',2,36);
+  draw('本卡数字与页面同一次计算一致。默认样例为虚构示例，费率与物品由你填写，不代表任何快递公司报价；本工具只做计费重与运费算术对账，不装箱、不联网、不查真实报价。',
+    19,400,'#718095',2,26);
+  return cv;
+}
+
+// ── 事件绑定 ────────────────────────────────────────────────
+function boot(){
+  fillForm(C.sample);
+  var saved=null;
+  try{saved=localStorage.getItem(STORE);}catch(e){saved=null;}
+  if(saved){
+    try{restoreFrom(JSON.parse(saved),'本机自动存档');}catch(e){}
+  }
+  run();
+
+  var panel=$('inputPanel');
+  panel.addEventListener('input',function(e){
+    if(e.target&&e.target.id==='ovOn')$('ovBox').hidden=!$('ovOn').checked;
+    run();
+  });
+  panel.addEventListener('change',function(e){
+    if(e.target&&e.target.id==='ovOn')$('ovBox').hidden=!$('ovOn').checked;
+    run();
+  });
+  $('items').addEventListener('click',function(e){
+    var b=e.target.closest?e.target.closest('.del'):null;
+    if(!b)return;
+    var i=Number(b.getAttribute('data-del'));
+    if(items.length<=1){setMessage('至少要保留一行物品。');return;}
+    items.splice(i,1);renderItems();run();
+  });
+  $('addRow').addEventListener('click',function(){
+    if(items.length>=C.LIMITS.MAX_ROWS)return;
+    var inp=readInput();
+    items=inp.items.concat([blankItem()]);
+    renderItems();run();
+    setMessage('已加一行，填好重量与三边即自动计算。');
+  });
+  $('demo').addEventListener('click',function(){
+    fillForm(C.sample);backupDims=null;setMessage('已载入虚构示例（搬家寄 5 个规格）。');run();
+  });
+  $('save').addEventListener('click',function(){
+    try{
+      localStorage.setItem(STORE,JSON.stringify(snapshot()));
+      setMessage('已保存到本机（同一浏览器刷新后自动恢复）。');
+      $('savedNote').textContent='已保存到本机。';
+    }catch(e){setMessage('保存失败：'+(e&&e.message?e.message:'浏览器拒绝写入本地存储'));}
+  });
+  $('restore').addEventListener('click',function(){
+    var s=null;
+    try{s=localStorage.getItem(STORE);}catch(e){s=null;}
+    if(!s){setMessage('本机还没有存档，先点「保存到本机」。');return;}
+    try{restoreFrom(JSON.parse(s),'本机存档');}catch(e){setMessage('存档解析失败：'+e.message);}
+  });
+  $('backup').addEventListener('click',function(){
+    download('计费重对账台-备份.json',JSON.stringify(snapshot(),null,2),'application/json');
+    setMessage('已下载 JSON 备份。');
+  });
+  $('import').addEventListener('click',function(){$('imports').click();});
+  $('imports').addEventListener('change',function(e){
+    var f=e.target.files&&e.target.files[0];
+    if(!f)return;
+    var fr=new FileReader();
+    fr.onload=function(){
+      try{restoreFrom(JSON.parse(String(fr.result)),'导入的备份文件');}
+      catch(err){setMessage('导入失败：'+err.message);}
+    };
+    fr.onerror=function(){setMessage('读取文件失败。');};
+    fr.readAsText(f);
+    e.target.value='';
+  });
+  $('csv').addEventListener('click',function(){if(!lastSolved)return;download('计费重对账-明细.csv',toCSV(lastSolved),'text/csv;charset=utf-8');});
+  $('md').addEventListener('click',function(){if(!lastSolved)return;download('计费重对账-说明.md',toMD(lastSolved),'text/markdown;charset=utf-8');});
+  $('json').addEventListener('click',function(){download('计费重对账台-备份.json',JSON.stringify(snapshot(),null,2),'application/json');});
+  $('png').addEventListener('click',function(){
+    if(!lastSolved)return;
+    var cv=drawCard(lastSolved);
+    cv.toBlob(function(b){
+      var url=URL.createObjectURL(b),a=document.createElement('a');
+      a.href=url;a.download='计费重对账-结果卡.png';
+      document.body.appendChild(a);a.click();
+      setTimeout(function(){URL.revokeObjectURL(url);a.remove();},1500);
+    },'image/png');
+  });
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);
+else boot();
+})();
+</script></html>

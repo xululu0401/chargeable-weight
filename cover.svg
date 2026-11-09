@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1200" viewBox="0 0 1200 1200" font-family="system-ui,-apple-system,'PingFang SC',sans-serif">
+  <rect width="1200" height="1200" fill="#eef3f8"/>
+  <rect x="48" y="48" width="1104" height="1104" rx="28" fill="#ffffff"/>
+  <text x="104" y="146" font-size="26" font-weight="700" fill="#4f6b91" letter-spacing="3">CHARGEABLE WEIGHT LEDGER</text>
+  <text x="104" y="212" font-size="24" fill="#5a6d84">寄件计费重对账台 · V1.0.0</text>
+  <text x="104" y="316" font-size="62" font-weight="700" fill="#22344e">这一箱寄出去，</text>
+  <text x="104" y="392" font-size="62" font-weight="700" fill="#22344e">到底按几公斤收钱？</text>
+  <line x1="104" y1="446" x2="1096" y2="446" stroke="#d9e3ee" stroke-width="2"/>
+  <text x="104" y="512" font-size="28" fill="#5a6d84">快递收的不是你称出来的重量，而是计费重：</text>
+  <text x="104" y="556" font-size="28" fill="#5a6d84">取实重与体积重（长×宽×高÷除数）里更大的那个，向上取整，再套首重 + 续重。</text>
+  <rect x="104" y="606" width="992" height="212" rx="18" fill="#f7fafd" stroke="#dbe5f0"/>
+  <text x="140" y="666" font-size="26" font-weight="700" fill="#2d5f96">默认虚构示例（搬家寄 5 个规格）</text>
+  <text x="140" y="716" font-size="25" fill="#22344e">逐件单独寄 565.00 元　→　最优拆成 3 个包裹 500.00 元</text>
+  <text x="140" y="756" font-size="25" font-weight="700" fill="#2b6b4f">省 65.00 元（11.5%）；全部合并成 1 个包裹反而要 510.00 元</text>
+  <text x="140" y="796" font-size="23" fill="#a23b28">棉被袋实重 2.50 kg，体积重 26.25 kg，按 26.50 kg 收钱（泡重多付 120.00 元）</text>
+  <rect x="104" y="852" width="992" height="150" rx="18" fill="#eef3f8"/>
+  <text x="140" y="906" font-size="24" fill="#22344e">· 逐规格算清：实重 / 体积重 / 计费重 / 谁主导 / 进位损耗 / 泡重多付</text>
+  <text x="140" y="946" font-size="24" fill="#22344e">· 拆还是合：件数 ≤10、包裹 ≤4 时<tspan font-weight="700">枚举全部划分</tspan>取精确最优，不是贪心</text>
+  <text x="140" y="986" font-size="24" fill="#22344e">· 除数 5000/6000/8000/12000 与进位 0.1/0.5/1 kg 各重算一遍；四种导出</text>
+  <text x="104" y="1056" font-size="24" fill="#5a6d84">全程整数口径（克 / 毫米 / 分），无浮点漂移；不装箱、不联网、不查真实报价</text>
+  <text x="104" y="1096" font-size="24" fill="#5a6d84">默认物品与费率为虚构示例，不代表任何快递公司的实际报价</text>
+  <text x="104" y="1138" font-size="24" font-weight="700" fill="#2d5f96">在线体验：xululu0401.github.io/chargeable-weight</text>
+</svg>
